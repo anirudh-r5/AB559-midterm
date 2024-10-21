@@ -1,9 +1,9 @@
-var safemath = artifacts.require("/contracts/safemath.sol");
-var zombiefactory = artifacts.require("ZombieFactory");
-var zombiefeeding = artifacts.require("ZombieFeeding");
-var zombiehelper = artifacts.require("ZombieHelper");
-var zombieattack = artifacts.require("ZombieAttack");
-var zombieownership = artifacts.require("ZombieOwnership");
+var safemath = artifacts.require("SafeMath.sol");
+var zombiefactory = artifacts.require("ZombieFactory.sol");
+var zombiefeeding = artifacts.require("ZombieFeeding.sol");
+var zombiehelper = artifacts.require("ZombieHelper.sol");
+var zombieattack = artifacts.require("ZombieAttack.sol");
+var zombieownership = artifacts.require("ZombieOwnership.sol");
 
 module.exports = function (deployer) {
 	deployer.deploy(safemath);
