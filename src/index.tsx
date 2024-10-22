@@ -16,7 +16,7 @@ root.render(
       sdkOptions={{
         dappMetadata: {
           name: 'Example React Dapp',
-          url: 'http://localhost:5173',
+          url: 'http://localhost:3000',
         },
         // Other options.
       }}

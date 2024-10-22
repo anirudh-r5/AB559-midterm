@@ -120,6 +120,25 @@ let cryptoZombiesABI = [
 		constant: true,
 		inputs: [
 			{
+				name: '_owner',
+				type: 'address',
+			},
+		],
+		name: 'getAllZombies',
+		outputs: [
+			{
+				name: '',
+				type: 'uint256[]',
+			},
+		],
+		payable: false,
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		constant: true,
+		inputs: [
+			{
 				name: '',
 				type: 'uint256',
 			},
