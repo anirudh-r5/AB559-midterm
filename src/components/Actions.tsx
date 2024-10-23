@@ -9,7 +9,7 @@ const Actions: React.FC<ActionProps> = ({ show, create, disable }) => {
     <section className="section">
       <div className="container buttons is-centered">
         <button className="button is-dark is-link" onClick={show}>
-          Show Zombies
+          Show All Zombies
         </button>
         <button
           className="button is-dark is-danger"

@@ -9,6 +9,14 @@ contract ZombieOwnership is ZombieAttack, ERC721 {
 
     mapping(uint => address) zombieApprovals;
 
+    modifier onlyOwnerOf(uint _zombieId) {
+        require(
+            msg.sender == zombieToOwner[_zombieId],
+            "You must own this zombie."
+        );
+        _;
+    }
+
     function balanceOf(address _owner) external view returns (uint256) {
         return ownerZombieCount[_owner];
     }

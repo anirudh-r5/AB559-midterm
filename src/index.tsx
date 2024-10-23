@@ -15,7 +15,7 @@ root.render(
       debug={false}
       sdkOptions={{
         dappMetadata: {
-          name: 'Example React Dapp',
+          name: 'Zombie Arena',
           url: 'http://localhost:3000',
         },
         // Other options.

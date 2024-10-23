@@ -20,6 +20,8 @@ function App() {
   const [contractURL, setContractURL] = useState('');
   const [currentZombie, setCurrentZombie] = useState<any>();
   const [zombieList, setZombieList] = useState<Array<any>>();
+  const [levelStatus, setLevelStatus] = useState(false);
+  const [battleStatus, setBattleStatus] = useState(0);
 
   const connectWallet = async () => {
     try {
@@ -74,10 +76,12 @@ function App() {
       setCurrentZombie('');
       return;
     }
+    const id = ownerZombie?.[0];
     const zombieDetails: any[] = await zombies.methods
-      .zombies(ownerZombie?.[0])
+      .zombies(id)
       .call({ gas: '2000000' });
     const deets = {
+      id: id,
       name: zombieDetails[0],
       dna: zombieDetails[1].toString(),
       level: zombieDetails[2].toString(),
@@ -87,18 +91,27 @@ function App() {
       owner: true,
     };
     setCurrentZombie(deets);
+    return deets;
   };
 
   const getAllZombies = async () => {
+    getZombiesByOwner();
     const zombiesIds: any[] = await zombies.methods
       .getAllZombies(account)
       .call({ gas: '2000000' });
-    const allZombies = [];
-    for (let id of zombiesIds) {
+    const allZombies: any[] = [];
+    const setIds = new Set(zombiesIds);
+    console.log(zombiesIds);
+    for (const id of setIds.values()) {
+      const checkOwner: any[] = await zombies.methods.zombieToOwner(id).call();
+      console.log(checkOwner.toString());
+      if (account?.toLowerCase() === checkOwner.toString().toLowerCase())
+        continue;
       const zombieDetails: any[] = await zombies.methods
         .zombies(id)
         .call({ gas: '2000000' });
       const deets = {
+        id: id,
         name: zombieDetails[0],
         dna: zombieDetails[1].toString(),
         level: zombieDetails[2].toString(),
@@ -112,6 +125,38 @@ function App() {
     setZombieList(allZombies);
   };
 
+  const levelUp = async () => {
+    await zombies.methods
+      .levelUp(currentZombie.id)
+      .send({ from: account, value: Web3.utils.toWei('0.001', 'ether') })
+      .on('receipt', () => {
+        console.log('Power overwhelming! Zombie successfully leveled up');
+        getZombiesByOwner();
+        setLevelStatus(true);
+        setTimeout(() => setLevelStatus(false), 5000);
+      })
+      .on('error', (error) => {
+        console.error(error);
+      });
+  };
+
+  const fightZombie = async (targetId: number) => {
+    const win = currentZombie.winCount;
+    const loss = currentZombie.lossCount;
+    await zombies.methods
+      .attack(currentZombie.id, targetId)
+      .send({ from: account, gas: '300000' });
+    const deets = await getZombiesByOwner();
+    await getAllZombies();
+    if (deets?.winCount > win) {
+      setBattleStatus(1);
+    } else if (deets?.lossCount > loss) {
+      setBattleStatus(2);
+    }
+    setTimeout(() => setBattleStatus(0), 5000);
+    return;
+  };
+
   useEffect(() => {
     connectWallet();
   });
@@ -123,7 +168,7 @@ function App() {
       {connected && zombies === undefined && <Connector connect={connect} />}
       {contractAddress !== '' && (
         <Actions
-          show={getZombiesByOwner}
+          show={getAllZombies}
           create={createRandomZombie}
           disable={currentZombie ? true : false}
         />
@@ -132,11 +177,23 @@ function App() {
         <div className="container">
           <div className="columns">
             <div className="column is-one-third">
-              {currentZombie && <Zombie zombieDeets={currentZombie} />}
+              {currentZombie && (
+                <Zombie
+                  zombieDeets={currentZombie}
+                  handleClick={levelUp}
+                  levelUp={levelStatus}
+                  battleStatus={battleStatus}
+                />
+              )}
             </div>
             <div className="column">
               {zombieList?.map((deet) => (
-                <Zombie zombieDeets={deet} />
+                <Zombie
+                  zombieDeets={deet}
+                  handleClick={() => fightZombie(deet.id)}
+                  levelUp={false}
+                  battleStatus={0}
+                />
               ))}
             </div>
           </div>
