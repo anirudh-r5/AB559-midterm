@@ -125,14 +125,22 @@ const Zombie: React.FC<ZombieProps> = ({
             )}
           </div>
           <div className="panel-block is-centered">
-            <figure className="is-image is-64x64 is-centered">
-              <img
-                width={256}
-                height={256}
-                src={zombArr[(zombieDeets.dna + zombieDeets.readyTime) % 10]}
-                alt="Zombie"
-              />
-            </figure>
+            <section className="section">
+              <figure className="is-image is-128x128 is-centered">
+                <img
+                  width={128}
+                  height={128}
+                  src={
+                    zombArr[
+                      (parseInt(zombieDeets.dna.toString()[0]) +
+                        zombieDeets.readyTime) %
+                        10
+                    ]
+                  }
+                  alt="Zombie"
+                />
+              </figure>
+            </section>
           </div>
         </nav>
       </div>
