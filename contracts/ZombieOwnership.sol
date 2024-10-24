@@ -3,8 +3,9 @@ pragma solidity ^0.4.25;
 import "./ZombieAttack.sol";
 import "./ERC721.sol";
 import "./SafeMath.sol";
+import "./KittyContract.sol";
 
-contract ZombieOwnership is ZombieAttack, ERC721 {
+contract ZombieOwnership is ZombieAttack, ERC721, KittyContract {
     using SafeMath for uint256;
 
     mapping(uint => address) zombieApprovals;

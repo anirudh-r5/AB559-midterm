@@ -1,6 +1,8 @@
 pragma solidity ^0.4.25;
 
-contract KittyContract {
+import "./ZombieFeeding.sol";
+
+contract KittyContract is ZombieFeeding {
     struct Kitty {
         uint256 genes;
         uint64 birthTime;

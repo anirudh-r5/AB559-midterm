@@ -61,6 +61,7 @@ function App() {
       setContractAddress(address);
       setContractURL(url);
       await getZombiesByOwner();
+      await getKittiesByOwner();
     }
   };
 
@@ -239,15 +240,12 @@ function App() {
 
   const feedKitty = async () => {
     await zombies.methods
-      .feedOnKitty(
-        currentZombie.id,
-        currentKitty.id,
-        'Fed' + currentZombie.name
-      )
+      .eatUp(currentZombie.id, currentKitty.genes, 'Fed ' + currentZombie.name)
       .send({ from: account, value: Web3.utils.toWei('0.001', 'ether') })
       .on('receipt', () => {
         console.log('Nom Nom! Zombie fed!');
         getKittiesByOwner();
+        getZombiesByOwner();
         setFeedStatus(true);
         setTimeout(() => setFeedStatus(false), 5000);
       })

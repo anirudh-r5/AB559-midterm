@@ -41,7 +41,6 @@ const Zombie: React.FC<ZombieProps> = ({
             </span>
             <p>Name: {zombieDeets.name}</p>
           </label>
-          {/* <div className='panel-block'><button className="button">Change Name</button></div> */}
           <label className="panel-block is-active">
             <span className="panel-icon">
               <i className="fa-solid fa-dna" aria-hidden="true"></i>
@@ -132,8 +131,8 @@ const Zombie: React.FC<ZombieProps> = ({
                   height={128}
                   src={
                     zombArr[
-                      (parseInt(zombieDeets.dna.toString()[0]) +
-                        zombieDeets.readyTime) %
+                      ((parseInt(zombieDeets.dna.toString()) % 100) +
+                        (parseInt(zombieDeets.readyTime.toString()) % 100)) %
                         10
                     ]
                   }
